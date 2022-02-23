@@ -1,8 +1,8 @@
 import {ethers} from 'ethers';
-
 const provider = new ethers.providers.Web3Provider(ethereum);
 
 export default async function addContract(id, contract, arbiter, beneficiary, value) {
+
   const buttonId = `approve-${id}`;
 
   const container = document.getElementById("container");
@@ -11,6 +11,24 @@ export default async function addContract(id, contract, arbiter, beneficiary, va
   contract.on('Approved', () => {
     document.getElementById(buttonId).className = "complete";
     document.getElementById(buttonId).innerText = "✓ It's been approved!";
+
+    let contract = {
+      _buttonId : buttonId.toString(),
+      _arbiter : arbiter.toString(),
+      _beneficiary: beneficiary.toString(),
+      _value : value.toString()
+    }
+    
+    if(!window.localStorage.getItem('storageCounter')) {
+       window.localStorage.setItem('storageCounter', 0);
+    }
+    
+    let localStorageCounter = Number(window.localStorage.getItem('storageCounter'));
+
+    window.localStorage.setItem(++localStorageCounter, JSON.stringify(contract));
+
+    window.localStorage.setItem('storageCounter', localStorageCounter)
+
   });
 
   document.getElementById(buttonId).addEventListener("click", async () => {

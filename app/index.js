@@ -3,11 +3,12 @@ import deploy from './deploy';
 import addContract from './addContract';
 import "./index.scss";
 
-let contracts = 0;
+let contracts = Object.entries(localStorage).length + 1;
 async function newContract() {
   const beneficiary = document.getElementById("beneficiary").value;
   const arbiter = document.getElementById("arbiter").value;
-  const value = ethers.BigNumber.from(document.getElementById("wei").value);
+  //Parse to Eth
+  const value = ethers.utils.parseEther(document.getElementById("eth").value);
   const contract = await deploy(arbiter, beneficiary, value);
   addContract(++contracts, contract, arbiter, beneficiary, value);
 }
